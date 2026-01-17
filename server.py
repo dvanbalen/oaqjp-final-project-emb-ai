@@ -1,7 +1,6 @@
 '''
 Backend code for the emotion detector webapp
 '''
-import json
 from flask import Flask, render_template, request
 from EmotionDetection.emotion_detection import emotion_detector
 
@@ -23,6 +22,9 @@ def detect_emotion():
     if text_to_analyze is None:
         return "No text provided for analysis"
     emotions = emotion_detector(text_to_analyze)
+    # Check for server error response
+    if emotions['dominant_emotion'] is None:
+        return "Invalid text! Please try again!!"
     response_msg = f"For the given statement, the system response is "\
     f"'anger': {emotions['anger']}, 'disgust': {emotions['disgust']}, "\
     f"'fear': {emotions['fear']}, 'joy': {emotions['joy']} and "\

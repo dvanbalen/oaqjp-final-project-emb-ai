@@ -12,6 +12,16 @@ def emotion_detector(text_to_analyse):
     input_json = { "raw_document": { "text": text_to_analyse } }
     # Call AI service
     response = requests.post(url, headers = header, json = input_json)
+    # Handle error HTTP codes
+    if response.status_code == 400 or response.status_code == 500:
+        emotions = {}
+        emotions['anger'] = None
+        emotions['disgust'] = None
+        emotions['fear'] = None
+        emotions['joy'] = None
+        emotions['sadness'] = None
+        emotions['dominant_emotion'] = None
+        return emotions
     # Convert response text to dictionary
     resp_dict = json.loads(response.text)
     # Extract emotions from response
